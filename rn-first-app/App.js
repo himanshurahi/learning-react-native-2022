@@ -14,6 +14,7 @@ import GoalItem from "./components/GoalItem";
 
 export default function App() {
   const [courseGoals, setCourseGoals] = useState([]);
+  const [isAddMode, setIsMode] = useState(false);
   const addGoalHandler = (goalTitle) => {
     setCourseGoals([
       ...courseGoals,
@@ -30,7 +31,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <GoalInput onAddGoal={addGoalHandler} />
+      <Button title="Add New Goal" onPress={() => setIsMode(true)}></Button>
+      <GoalInput visible={isAddMode} onAddGoal={addGoalHandler} />
       <FlatList
         data={courseGoals}
         renderItem={(itemData) => (
