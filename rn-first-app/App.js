@@ -2,50 +2,34 @@ import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import {
   Button,
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
+import GoalInput from "./components/GoalInput";
+import GoalItem from "./components/GoalItem";
 
 export default function App() {
-  const [Goal, setGoal] = useState("");
   const [courseGoals, setCourseGoals] = useState([]);
-
-  const inputHandler = (text) => {
-    setGoal(text);
-  };
-
-  const addGoalHandler = () => {
-    setCourseGoals([...courseGoals, Goal]);
+  const addGoalHandler = (goalTitle) => {
+    setCourseGoals([
+      ...courseGoals,
+      { id: Math.random().toString(), value: goalTitle },
+    ]);
     console.log(courseGoals);
-    setGoal("");
   };
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}>
-        <TextInput
-          placeholder="Course Goal"
-          style={styles.textInput}
-          onChangeText={inputHandler}
-          value={Goal}
-        />
-        <Button title="Add" onPress={addGoalHandler}></Button>
-      </View>
-      <ScrollView>
-        {courseGoals.map((goal) => (
-          <View style={styles.listItems} key={Math.random()}>
-            <Text>{goal}</Text>
-          </View>
-        ))}
-      </ScrollView>
+      <GoalInput onAddGoal={addGoalHandler} />
+      <FlatList
+        data={courseGoals}
+        renderItem={(itemData) => (
+          <GoalItem title={itemData.item.value} />
+        )}></FlatList>
       <StatusBar style="auto" />
     </View>
   );
@@ -60,12 +44,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     padding: 10,
     width: "80%",
-  },
-  listItems: {
-    padding: 10,
-    marginVertical: 10,
-    backgroundColor: "#ccc",
-    borderColor: "black",
-    borderWidth: 1,
   },
 });
